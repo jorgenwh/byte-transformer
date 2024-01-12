@@ -102,7 +102,6 @@ class ByteTransformer(nn.Module):
         x = self.ln(x)
         x = self.fc(x)
 
-        x = x[:, -1, :]
         return x
 
 

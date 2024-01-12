@@ -6,10 +6,13 @@ def read_text(filename):
     with open(filename, "r") as f:
         return f.read()
 
-def preprocess_text(text):
+def text_to_ascii_tensor(text):
     asc = [ord(c) if ord(c) < 256 else 256 for c in text]
     data = torch.tensor(asc)
     return data
+
+def ascii_tensor_to_text(tensor):
+    return "".join([chr(t) for t in tensor])
 
 def get_time_stamp(s):
     t_s = str(datetime.timedelta(seconds=round(s)))
