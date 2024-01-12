@@ -7,12 +7,9 @@ def read_text(filename):
         return f.read()
 
 def preprocess_text(text):
-    vocab = sorted(list(set(text)))
-    vocab_size = len(vocab)
-    char_to_index = {char: index for index, char in enumerate(vocab)}
-    index_to_char = {index: char for index, char in enumerate(vocab)}
-    data = torch.tensor([char_to_index[char] for char in text])
-    return data, vocab_size, char_to_index, index_to_char
+    asc = [ord(c) if ord(c) < 256 else 256 for c in text]
+    data = torch.tensor(asc)
+    return data
 
 def get_time_stamp(s):
     t_s = str(datetime.timedelta(seconds=round(s)))
@@ -44,14 +41,5 @@ class AverageMeter():
 
 
 if __name__ == "__main__":
-    text = read_data()
-    print(len(text))
-    data, vocab_size, char_to_index, index_to_char = preprocess_text(text)
-    print(data)
-    print(data.dtype)
-    print(data.shape)
-
-    print(char_to_index)
-
-    print(text[:10])
-    print(data[:10])
+    raw_text = read_text("data/tinyshakespeare.txt")
+    data = preprocess_text(raw_text)

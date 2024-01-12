@@ -2,17 +2,14 @@ import time
 import torch
 from collections import deque
 
-from mlp import MLP
-from rnn import RNN
-from lstm import LSTM
-from transformer import Transformer
+from transformer import ByteTransformer
 from helpers import read_text, preprocess_text, get_time_stamp, AverageMeter
 
 
-text = "mental_health.csv"
+text = "tinyshakespeare.txt"
 
 
-data, vocab_size, char_to_index, index_to_char = preprocess_text(read_text("data/" + text))
+data = preprocess_text(read_text("data/" + text))
 assert data.dtype == torch.int64
 
 
@@ -20,10 +17,10 @@ BATCH_SIZE = 128
 LEARNING_RATE = 0.001
 START_EPOCH = 0
 EPOCHS = 100
-EMBD_DIM = 32
-SEQ_LEN = 256
+BLOCK_SIZE = 256
 D_MODEL = 512
-N_HEADS = 4
+N_HEADS = 8
+N_BLOCKS = 6
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -42,10 +39,10 @@ def get_batch():
 
 
 model = Transformer(
-        vocab_size=vocab_size,
-        seq_len=SEQ_LEN,
+        block_size=BLOCK_SIZE,
         d_model=D_MODEL,
         n_heads=N_HEADS,
+        n_blocks=N_BLOCKS,
         device=DEVICE
 )
 
